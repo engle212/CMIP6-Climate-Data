@@ -1,0 +1,8 @@
+Models,Types,Variables,StartYear,EndYear,hStart,hEnd,north,west,east,south
+ACCESS-CM2,ssp585,hurs,2020,2030,1980,2000,42.337,-85.301,-82.654,40.368
+,ssp126,pr,,,,,,,,
+,historical,rlds,,,,,,,,
+,,rsds,,,,,,,,
+,,sfcWind,,,,,,,,
+,,tasmax,,,,,,,,
+,,tasmin,,,,,,,,
