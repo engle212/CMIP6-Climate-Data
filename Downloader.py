@@ -4,12 +4,12 @@ import pandas as pd
 
 def requestFromServer(reqURL):
     try:
-        print('**')
+        print('Requesting from server...')
         r = requests.get(reqURL)
-        print('[]')
+        r.raise_for_status()
     except requests.exceptions.RequestException as e:
         # retry
-        print('[Retrying server request]')
+        print('Retrying server request...')
         r = requestFromServer(reqURL)
     return r
 
@@ -17,7 +17,6 @@ def downloadDataRange(directory, model, type, var, startYear, endYear, north, we
     yRange = range(int(startYear), int(endYear) + 1)
 
     for year in yRange:
-        print(var)
         # assemble request URL using info
         url = ''.join(['https://ds.nccs.nasa.gov/thredds/ncss/AMES/NEX/GDDP-CMIP6/', str(model), '/', str(type), '/r1i1p1f1/', str(var), '/', str(var), '_day_', str(model), '_', str(type), '_r1i1p1f1_gn_', str(year), '.nc?var=', str(var), '&north=', str(north), '&west=', str(west), '&east=', str(east), '&south=', str(south), '&disableProjSubset=on&horizStride=1&time_start=', str(year), '-01-01T12%3A00%3A00Z&time_end=', str(year), '-12-31T12%3A00%3A00Z&timeStride=1&addLatLon=true'])
 
@@ -60,37 +59,11 @@ for model in specs.loc[:]['Models']:
                         if not os.path.exists(varDir):
                             # create var directory
                             os.mkdir(varDir)
-                        print(varDir)
                         # request corresponding data
-                        if model == 'historical':
+                        if type == 'historical':
                             start = specs.at[0, 'hStart']
                             end = specs.at[0, 'hEnd']
                         else:
                             start = specs.at[0, 'StartYear']
                             end = specs.at[0, 'EndYear']
                         downloadDataRange(outDir, model, type, var, start, end, specs.at[0, 'north'], specs.at[0, 'west'], specs.at[0, 'east'], specs.at[0, 'south'])
-
-#north = 42.337
-#west = -85.301
-#east = -82.654
-#south = 40.368
-
-#print('Welcome!')
-#print('...')
-#print('')
-#print('')
-# get info for request URL from user
-#model = input('Enter the model: ')
-
-#type = input('Enter the type of climate data: ')
-
-#var = input('Enter the variable name: ')
-
-#start = input('Enter start year: ')
-
-#end = input('Enter end year: ')
-
-
-#print('')
-#print('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -')
-#print('')
