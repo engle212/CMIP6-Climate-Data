@@ -10,6 +10,34 @@ def add_days_to_date(date, days):
     added_date = added_date.strftime("%Y-%m-%d")
     return added_date
 
+def convert_units(var, val):
+    converted = float(val) # convert to float type
+    if var == 'hurs':
+        # no change required
+        converted = converted
+    elif var == 'pr':
+        # (kg m-2s-1) * 86400
+        # reference: https://www.researchgate.net/post/How-do-I-convert-ERA-Interim-precipitation-estimates-from-kg-m2-s-to-mm-day
+        converted = converted * 86400
+    elif var == 'rlds':
+        # Wm-2 * 0.0036
+        converted = converted * 0.0036
+    elif var == 'rsds':
+        # Wm-2 * 0.0036
+        converted = converted * 0.0036
+    elif var == 'sfcWind':
+        # no change required
+        converted = converted
+    elif var == 'tasmax':
+        # Kelvin - 273.15
+        converted = converted - 273.15
+    elif var == 'tasmin':
+        # Kelvin - 273.15
+        converted = converted - 273.15
+    else:
+        # retain original value
+        converted = converted
+    return converted
 
 ncDir = 'Downloaded Files'
 outDir = 'Output Files'
@@ -106,8 +134,7 @@ for model in os.listdir(ncDir): # go through each model folder
                         min_index_lon = sq_diff_lon.argmin()
 
                         for t_index in np.arange(0, len(d_range)):
-                            print('Recording value for: ' + str(d_range[t_index]) + ' @ ' + name)
-                            column.at[d_range[t_index], name] = varData[t_index, min_index_lat, min_index_lon]
+                            column.at[d_range[t_index], name] = convert_units(var, varData[t_index, min_index_lat, min_index_lon])
 
                         # concat df with column
                         yearChunk = pd.concat([yearChunk, column], axis=1, ignore_index=False).copy()
