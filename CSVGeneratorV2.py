@@ -126,7 +126,7 @@ for model in os.listdir(ncDir): # go through each model folder
             # YEAR DOY Date
             year = pd.Series(varDat.copy().index.year).rename('YEAR', inplace=True)
             doy = pd.Series(varDat.copy().index.dayofyear).rename('DOY', inplace=True)
-            date = pd.Series(varDat.copy().index.tz_localize(None).date).rename('Date', inplace=True)
+            date = pd.Series(varDat.copy().index.to_datetimeindex(unsafe=True).tz_localize(None).date).rename('Date', inplace=True)
             varDat.reset_index(drop=True, inplace=True)
 
             varDat = pd.concat([year, doy, date, varDat], axis=1, ignore_index=False).copy()

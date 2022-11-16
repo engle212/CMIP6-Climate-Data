@@ -11,6 +11,7 @@ def requestFromServer(reqURL):
     except requests.exceptions.RequestException as e:
         # retry
         print('Retrying server request...')
+        print(e)
         time.sleep(2)
         r = requestFromServer(reqURL)
     return r
@@ -20,12 +21,12 @@ def downloadDataRange(directory, model, type, var, startYear, endYear, north, we
 
     for year in yRange:
         # assemble request URL using info
-        url = ''.join(['https://ds.nccs.nasa.gov/thredds/ncss/AMES/NEX/GDDP-CMIP6/', str(model), '/', str(type), '/r1i1p1f1/', str(var), '/', str(var), '_day_', str(model), '_', str(type), '_r1i1p1f1_gn_', str(year), '.nc?var=', str(var), '&north=', str(north), '&west=', str(west), '&east=', str(east), '&south=', str(south), '&disableProjSubset=on&horizStride=1&time_start=', str(year), '-01-01T12%3A00%3A00Z&time_end=', str(year), '-12-31T12%3A00%3A00Z&timeStride=1&addLatLon=true'])
+        url = ''.join(['https://ds.nccs.nasa.gov/thredds/ncss/AMES/NEX/GDDP-CMIP6/', str(model), '/', str(type), '/r1i1p1f1/', str(var), '/', str(var), '_day_', str(model), '_', str(type), '_r1i1p1f1_gr1_', str(year), '.nc?var=', str(var), '&north=', str(north), '&west=', str(west), '&east=', str(east), '&south=', str(south), '&disableProjSubset=on&horizStride=1&time_start=', str(year), '-01-01T12%3A00%3A00Z&time_end=', str(year), '-12-31T12%3A00%3A00Z&timeStride=1&addLatLon=true'])
 
         req = requestFromServer(url)
         print('Request completed, downloading...')
 
-        fileName = str(var) + '_day_' + model + '_' + str(type) + '_r1i1p1f1_gn_' + str(year) + '.nc'
+        fileName = str(var) + '_day_' + model + '_' + str(type) + '_r1i1p1f1_gr1_' + str(year) + '.nc'
 
         filePath = os.path.join(directory, model, type, var, fileName)
 
